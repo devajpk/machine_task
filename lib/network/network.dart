@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:machine_task/main.dart' hide Article;
 import 'package:machine_task/model/model.dart';
@@ -31,6 +30,17 @@ class NewsRepository {
     }
 
     final articlesJson = (jsonBody['articles'] as List<dynamic>);
-    return articlesJson.map((e) => Article.fromJson(e as Map<String, dynamic>)).toList();
+    return articlesJson
+        .map((e) => Article.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<http.Response> fetchNews({
+    required String apiKey,
+    required String baseUrl,
+    int page = 1,
+  }) {
+    final url = Uri.parse('$baseUrl?country=us&page=$page&apiKey=$apiKey');
+    return http.get(url);
   }
 }
